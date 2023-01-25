@@ -42,3 +42,14 @@ func ListMajors(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": majors})
 }
+
+func DeleteMajor(c *gin.Context) {
+	id := c.Param("major_id")
+
+	if tx := entity.DB().Exec("DELETE FROM majors WHERE major_id = ?", id); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Major not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": id})
+}
